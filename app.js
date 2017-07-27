@@ -4,15 +4,11 @@ const PORT = process.env.PORT || 3000;
 const mustacheExpress = require('mustache-express');
 
 app.engine('mst', mustacheExpress())
-app.set('views', './views')
+app.set('views', './templates')
 app.set('view engine', 'mst')
 
-app.use(express.static('public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
 const authenticate = (req, res, next) => {
-  if ((req.query.username === "username") && (req.query.password === "password")) {
+  if (req.query.username === "username" && req.query.password === "password") {
     next()
   } else {
     res.redirect('/login')
@@ -21,13 +17,13 @@ const authenticate = (req, res, next) => {
 
 app.get("/login", (req, res) => {
   console.log("logging in")
-  res.send("Login")
+  res.render('login');
 })
 
 app.use(authenticate)
 app.get("/", (req, res) => {
   console.log("Home")
-  res.render('/');
+  res.render('index');
 });
 
 app.listen(3000, () => {
